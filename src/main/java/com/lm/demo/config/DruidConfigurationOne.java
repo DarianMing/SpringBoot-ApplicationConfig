@@ -1,11 +1,15 @@
 package com.lm.demo.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.support.http.StatViewServlet;
 
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 public class DruidConfigurationOne {
@@ -13,8 +17,7 @@ public class DruidConfigurationOne {
     @Bean
     public DruidDataSource druidDataSource1 () throws SQLException {
         DruidDataSource druidDataSource = new DruidDataSource();
-        //jdbc配置
-        druidDataSource.close();
+        //数据库配置
         druidDataSource.setName("testDruidDataSource2");
         druidDataSource.setUsername("root");
         druidDataSource.setPassword("245220");
@@ -29,7 +32,18 @@ public class DruidConfigurationOne {
         druidDataSource.setMaxOpenPreparedStatements(100);
         druidDataSource.setQueryTimeout(100);
         druidDataSource.setLoginTimeout(100);
-        druidDataSource.setFilters("wall,slf4j");
+        druidDataSource.setFilters("wall,slf4j,stat");
         return druidDataSource;
+    }
+
+    @Bean
+    public ServletRegistrationBean druidServlet() {
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new StatViewServlet());
+        Set<String> set = new HashSet<>();
+        set.add("/druid/*");
+        servletRegistrationBean.setUrlMappings(set);
+//        servletRegistrationBean.addInitParameter("loginUsername" , "admin");
+//        servletRegistrationBean.addInitParameter("loginPassword" , "123456");
+        return servletRegistrationBean;
     }
 }
