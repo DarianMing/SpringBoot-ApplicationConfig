@@ -32,7 +32,7 @@ public class DruidConfigurationOne {
         druidDataSource.setMaxOpenPreparedStatements(100);
         druidDataSource.setQueryTimeout(100);
         druidDataSource.setLoginTimeout(100);
-        druidDataSource.setFilters("wall,slf4j,stat");
+        druidDataSource.setFilters("wall,slf4j");
         return druidDataSource;
     }
 
